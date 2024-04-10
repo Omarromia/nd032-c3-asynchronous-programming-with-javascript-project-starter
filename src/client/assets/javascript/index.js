@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function() {
 	onPageLoad()
 	setupClickHandlers()
 })
-
 async function onPageLoad() {
 	try {
 		getTracks()
@@ -322,10 +321,35 @@ function defaultFetchOpts() {
 
 function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
-}
+	async function fetchData() {
+		try {
+			const response = await fetch(`${SERVER}/api/tracks`);
 
+			if (!response.ok) throw new Error(`HTTP error! Status:${response.status}`)
+
+			const data = await response.json();
+			console.log(data)
+		} catch(err) {
+			throw new Error(`fetching was failed : ${err}`)
+		}
+	}
+	return fetchData()
+}
 function getRacers() {
 	// GET request to `${SERVER}/api/cars`
+	async function fetchData() {
+		try {
+			const response = await fetch(`${SERVER}/api/cars`);
+
+			if (!response.ok) throw new Error(`HTTP error! Status:${response.status}`)
+
+			const data = await response.json();
+			console.log(data)
+		} catch(err) {
+			throw new Error(`fetching was failed : ${err}`)
+		}
+	}
+	return fetchData()
 }
 
 function createRace(player_id, track_id) {
