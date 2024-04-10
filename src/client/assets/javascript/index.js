@@ -145,6 +145,7 @@ function handleSelectPodRacer(target) {
 	target.classList.add('selected')
 
 	// TODO - save the selected racer to the store
+
 }
 
 function handleSelectTrack(target) {
@@ -152,6 +153,7 @@ function handleSelectTrack(target) {
 
 	// remove class selected from all track options
 	const selected = document.querySelector('#tracks .selected')
+
 	if(selected) {
 		selected.classList.remove('selected')
 	}
@@ -160,7 +162,7 @@ function handleSelectTrack(target) {
 	target.classList.add('selected')
 
 	// TODO - save the selected track id to the store
-	
+
 }
 
 function handleAccelerate() {
@@ -319,37 +321,30 @@ function defaultFetchOpts() {
 
 // TODO - Make a fetch call (with error handling!) to each of the following API endpoints 
 
-function getTracks() {
+async function getTracks() {
 	// GET request to `${SERVER}/api/tracks`
-	async function fetchData() {
-		try {
-			const response = await fetch(`${SERVER}/api/tracks`);
+	try {
+		const response = await fetch(`${SERVER}/api/tracks`);
 
-			if (!response.ok) throw new Error(`HTTP error! Status:${response.status}`)
+		if (!response.ok) throw new Error(`HTTP error! Status: ${response}`)
 
-			const data = await response.json();
-			console.log(data)
-		} catch(err) {
-			throw new Error(`fetching was failed : ${err}`)
-		}
+		return await response.json()
+	} catch (err) {
+		throw new Error(`failed to fetch : ${err}`)
 	}
-	return fetchData()
 }
-function getRacers() {
+
+async function getRacers() {
 	// GET request to `${SERVER}/api/cars`
-	async function fetchData() {
-		try {
-			const response = await fetch(`${SERVER}/api/cars`);
+	try {
+		const response = await fetch(`${SERVER}/api/tracks`);
 
-			if (!response.ok) throw new Error(`HTTP error! Status:${response.status}`)
+		if (!response.ok) throw new Error(`HTTP error! Status: ${response}`)
 
-			const data = await response.json();
-			console.log(data)
-		} catch(err) {
-			throw new Error(`fetching was failed : ${err}`)
-		}
+		return await response.json()
+	} catch (err) {
+		throw new Error(`failed to fetch : ${err}`)
 	}
-	return fetchData()
 }
 
 function createRace(player_id, track_id) {
