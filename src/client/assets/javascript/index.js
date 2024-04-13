@@ -1,6 +1,6 @@
 // PROVIDED CODE BELOW (LINES 1 - 80) DO NOT REMOVE
 
-const { response } = require("express")
+// const { response } = require("express")
 
 // The store will hold all information needed globally
 let store = {
@@ -102,7 +102,8 @@ async function handleCreateRace() {
 	}
 	// TODO - call the async function startRace
 	startRace(store.race_id)
-	// TODO - call the async function runRace
+	// TODO - call the async function runRace 
+	await runRace(store.race_id)
 }
 
 
@@ -123,7 +124,7 @@ function runRace(raceID) {
 			else if (res.status === "finished") {
 				clearInterval(raceInterval);
 				renderAt('#race', resultsView(res.positions))
-				reslove(res);
+				resolve(res);
 			}
 		} catch (error) {
 			clearInterval(raceInterval);
