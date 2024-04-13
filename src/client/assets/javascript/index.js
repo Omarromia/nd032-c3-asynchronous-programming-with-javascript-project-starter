@@ -96,10 +96,7 @@ async function handleCreateRace() {
 	// The race has been created, now start the countdown
 	// TODO - call the async function runCountdown
 	try {
-		runCountdown()
-		.then(result => {
-			console.log(result + "race has started")
-		})
+		await runCountdown()
 	} catch(err) {
 		throw new Error("failed to start")
 	}
@@ -112,9 +109,26 @@ async function handleCreateRace() {
 function runRace(raceID) {
 	return new Promise(resolve => {
 	// TODO - use Javascript's built in setInterval method to get race info every 500ms
-	setInterval(() => {
-		fetch(`${SERVER}/api/races/${raceID}`)
-			.then()
+	const raceInterval = setInterval(async () => {
+		try {
+			const response = await fetch(`${SERVER}/api/races/${raceID}`)
+
+			if (!response.ok) {
+				throw new Error(`Failed to fetch race info. Status: ${response.status}`)
+			}
+
+			const res = await response.json()
+
+			if (res.status === "in-progress") renderAt('#leaderBoard', raceProgress(res.positions))
+			else if (res.status === "finished") {
+				clearInterval(raceInterval);
+				renderAt('#race', resultsView(res.positions))
+				reslove(res);
+			}
+		} catch (error) {
+			clearInterval(raceInterval);
+			throw new Error("Error starting the race" + error)
+		}
 	}, 500);
 	/* 
 		TODO - if the race info status property is "in-progress", update the leaderboard by calling:
@@ -187,7 +201,7 @@ function handleSelectTrack(target) {
 	}
 
 	// add class selected to current target
-	// target.classList.add('selected')
+	target.classList.add('selected')
 
 	// TODO - save the selected track id to the store
 	store.track_id = target.id;
